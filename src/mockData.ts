@@ -420,7 +420,7 @@ export const INITIAL_SERVICE_REQUESTS: ServiceRequest[] = [
     date: '2026-07-22',
     status: 'In Progress',
     description: 'Requested 50-leaf CTS-2010 chequebook for salary account dispatch to T. Nagar branch address.',
-    reachBack: {
+    followUp: {
       followUpDate: '2026-07-23',
       smsSent: true,
       emailSent: true,
@@ -444,7 +444,7 @@ export const INITIAL_SERVICE_REQUESTS: ServiceRequest[] = [
     date: '2026-07-23',
     status: 'Open',
     description: 'Card lost during travel at Airport. Immediate hotlisting requested for RuPay Platinum #4091.',
-    reachBack: {
+    followUp: {
       followUpDate: '2026-07-23',
       smsSent: true,
       emailSent: false,
@@ -467,7 +467,7 @@ export const INITIAL_SERVICE_REQUESTS: ServiceRequest[] = [
     date: '2026-07-20',
     status: 'Resolved',
     description: 'Updated residential address with valid EB Bill proof for Simmakkal Madurai jurisdiction.',
-    reachBack: {
+    followUp: {
       followUpDate: '2026-07-21',
       smsSent: true,
       emailSent: true,
@@ -492,7 +492,7 @@ export const INITIAL_SERVICE_REQUESTS: ServiceRequest[] = [
     date: '2026-07-19',
     status: 'Closed',
     description: 'Reset transaction password and unlocked corporate netbanking User ID.',
-    reachBack: {
+    followUp: {
       followUpDate: '2026-07-19',
       smsSent: true,
       emailSent: true,
