@@ -180,7 +180,7 @@ export interface ServiceRequest {
   date: string;
   status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
   description: string;
-  reachBack: {
+  followUp: {
     followUpDate: string;
     smsSent: boolean;
     emailSent: boolean;
