@@ -114,7 +114,7 @@ export const OperationsAnalyticsModule: React.FC = () => {
               <ArrowUpRight className="w-3 h-3" /> +22%
             </span>
           </div>
-          <p className="text-[10px] text-slate-500 font-mono">Resolved via ReachBack</p>
+          <p className="text-[10px] text-slate-500 font-mono">Resolved via Branch Follow-up</p>
         </div>
 
         {/* Pending Tasks */}
