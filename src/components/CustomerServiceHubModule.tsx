@@ -74,13 +74,13 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
       date: new Date().toISOString().split('T')[0],
       status: 'Open',
       description: description.trim() || 'Branch service ticket initiated by employee.',
-      reachBack: {
+      followUp: {
         followUpDate: new Date().toISOString().split('T')[0],
         smsSent: true,
         emailSent: false,
         callStatus: 'Not Initiated',
         nextFollowUp: new Date().toISOString().split('T')[0],
-        resolutionNotes: 'Awaiting initial officer reachback call.'
+        resolutionNotes: 'Awaiting initial officer follow-up call.'
       },
       timeline: {
         created: `${new Date().toISOString().split('T')[0]} ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
@@ -114,10 +114,10 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
     return true;
   });
 
-  // ReachBack Actions State inside Modal
-  const [reachCallStatus, setReachCallStatus] = useState<'Connected' | 'Unreachable' | 'Scheduled' | 'Not Initiated'>('Connected');
-  const [reachNotes, setReachNotes] = useState('');
-  const [reachNextDate, setReachNextDate] = useState('2026-07-24');
+  // Customer Follow-up Actions State inside Modal
+  const [followUpCallStatus, setFollowUpCallStatus] = useState<'Connected' | 'Unreachable' | 'Scheduled' | 'Not Initiated'>('Connected');
+  const [followUpNotes, setFollowUpNotes] = useState('');
+  const [followUpNextDate, setFollowUpNextDate] = useState('2026-07-24');
   const [toastAlert, setToastAlert] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -125,15 +125,15 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
     setTimeout(() => setToastAlert(null), 3000);
   };
 
-  const handleSaveReachBack = (req: ServiceRequest) => {
+  const handleSaveFollowUp = (req: ServiceRequest) => {
     const updated: ServiceRequest = {
       ...req,
       status: req.status === 'Open' ? 'In Progress' : req.status,
-      reachBack: {
-        ...req.reachBack,
-        callStatus: reachCallStatus,
-        nextFollowUp: reachNextDate,
-        resolutionNotes: reachNotes || req.reachBack.resolutionNotes
+      followUp: {
+        ...req.followUp,
+        callStatus: followUpCallStatus,
+        nextFollowUp: followUpNextDate,
+        resolutionNotes: followUpNotes || req.followUp.resolutionNotes
       },
       timeline: {
         ...req.timeline,
@@ -142,7 +142,7 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
     };
     onUpdateRequest(updated);
     setSelectedRequestDetails(updated);
-    showToast('ReachBack follow-up notes updated successfully!');
+    showToast('customer follow-up notes updated successfully!');
   };
 
   const handleResolveTicket = (req: ServiceRequest) => {
@@ -175,7 +175,7 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
             <span>Customer Service Hub</span>
           </h2>
           <p className="text-xs text-slate-500">
-            Branch ticketing, ReachBack follow-ups, SMS/Email logs, and audit resolution timeline
+            Branch ticketing, customer follow-ups, SMS/Email logs, and audit resolution timeline
           </p>
         </div>
 
@@ -321,7 +321,7 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
         </div>
       )}
 
-      {/* SUBTAB 2: REQUEST TRACKER & REACHBACK DETAILS */}
+      {/* SUBTAB 2: REQUEST TRACKER & FOLLOW-UP DETAILS */}
       {subTab === 'request_tracker' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Table Column */}
@@ -384,8 +384,8 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
                           key={req.id}
                           onClick={() => {
                             setSelectedRequestDetails(req);
-                            setReachCallStatus(req.reachBack.callStatus);
-                            setReachNotes(req.reachBack.resolutionNotes);
+                            setFollowUpCallStatus(req.followUp.callStatus);
+                            setFollowUpNotes(req.followUp.resolutionNotes);
                           }}
                           className={`cursor-pointer transition-colors ${
                             selectedRequestDetails?.id === req.id
@@ -426,7 +426,7 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
             </div>
           </div>
 
-          {/* Right Column: Request Details, ReachBack Follow-up & Audit Timeline */}
+          {/* Right Column: Request Details, Customer Follow-up & Audit Timeline */}
           {selectedRequestDetails && (
             <div className="space-y-4">
               {/* Ticket Summary Header */}
@@ -447,29 +447,29 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
                   <p><span className="text-slate-500">Description:</span> <span className="text-slate-700">{selectedRequestDetails.description}</span></p>
                 </div>
 
-                {/* REACHBACK FOLLOW-UP SECTION */}
+                {/* CUSTOMER FOLLOW-UP SECTION */}
                 <div className="bg-sky-50/50 p-4 rounded-xl border border-sky-200 space-y-3">
                   <h4 className="text-xs font-bold text-sky-800 uppercase tracking-wider border-b border-sky-200 pb-1.5">
-                    ReachBack Follow-up Controls
+                    Customer Follow-up Controls
                   </h4>
 
                   <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                     <div className="p-2 bg-white rounded border border-sky-200 flex justify-between items-center">
                       <span className="text-slate-500">SMS Sent:</span>
-                      <span className={selectedRequestDetails.reachBack.smsSent ? 'text-emerald-700 font-bold' : 'text-slate-400'}>
-                        {selectedRequestDetails.reachBack.smsSent ? 'YES' : 'NO'}
+                      <span className={selectedRequestDetails.followUp.smsSent ? 'text-emerald-700 font-bold' : 'text-slate-400'}>
+                        {selectedRequestDetails.followUp.smsSent ? 'YES' : 'NO'}
                       </span>
                     </div>
 
                     <div className="p-2 bg-white rounded border border-sky-200 flex justify-between items-center">
                       <span className="text-slate-500">Email Sent:</span>
-                      <span className={selectedRequestDetails.reachBack.emailSent ? 'text-emerald-700 font-bold' : 'text-slate-400'}>
-                        {selectedRequestDetails.reachBack.emailSent ? 'YES' : 'NO'}
+                      <span className={selectedRequestDetails.followUp.emailSent ? 'text-emerald-700 font-bold' : 'text-slate-400'}>
+                        {selectedRequestDetails.followUp.emailSent ? 'YES' : 'NO'}
                       </span>
                     </div>
                   </div>
 
-                  {/* Reachback Buttons */}
+                  {/* Follow-up Buttons */}
                   <div className="flex space-x-2">
                     <button
                       onClick={() => showToast('SMS Update sent to customer mobile')}
@@ -491,8 +491,8 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
                     <div>
                       <label className="block text-[10px] text-slate-600 font-mono mb-1">Call Status</label>
                       <select
-                        value={reachCallStatus}
-                        onChange={(e) => setReachCallStatus(e.target.value as any)}
+                        value={followUpCallStatus}
+                        onChange={(e) => setFollowUpCallStatus(e.target.value as any)}
                         className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 font-mono focus:outline-none focus:ring-1 focus:ring-sky-500"
                       >
                         <option value="Connected">Connected with Customer</option>
@@ -506,8 +506,8 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
                       <label className="block text-[10px] text-slate-600 font-mono mb-1">Next Follow-up Date</label>
                       <input
                         type="date"
-                        value={reachNextDate}
-                        onChange={(e) => setReachNextDate(e.target.value)}
+                        value={followUpNextDate}
+                        onChange={(e) => setFollowUpNextDate(e.target.value)}
                         className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 font-mono focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
                     </div>
@@ -516,8 +516,8 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
                       <label className="block text-[10px] text-slate-600 font-mono mb-1">Resolution Notes</label>
                       <textarea
                         rows={2}
-                        value={reachNotes}
-                        onChange={(e) => setReachNotes(e.target.value)}
+                        value={followUpNotes}
+                        onChange={(e) => setFollowUpNotes(e.target.value)}
                         placeholder="Enter resolution notes..."
                         className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
@@ -525,7 +525,7 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
 
                     <div className="flex space-x-2 pt-1">
                       <button
-                        onClick={() => handleSaveReachBack(selectedRequestDetails)}
+                        onClick={() => handleSaveFollowUp(selectedRequestDetails)}
                         className="flex-1 py-2 bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold rounded-xl shadow-xs"
                       >
                         Save Follow-up Notes
@@ -564,7 +564,7 @@ export const CustomerServiceHubModule: React.FC<CustomerServiceHubModuleProps> =
                     {selectedRequestDetails.timeline.followUp && (
                       <div className="relative">
                         <span className="w-2.5 h-2.5 rounded-full bg-sky-600 absolute -left-[21px] top-1"></span>
-                        <p className="font-bold text-slate-900">ReachBack Follow-up</p>
+                        <p className="font-bold text-slate-900">Customer Follow-up</p>
                         <p className="text-[10px] text-slate-500">{selectedRequestDetails.timeline.followUp}</p>
                       </div>
                     )}
