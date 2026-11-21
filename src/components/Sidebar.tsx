@@ -35,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { 
       id: 'customer_service', 
       label: 'Customer Service Hub', 
-      subLabel: 'Requests, ReachBack & Timeline',
+      subLabel: 'Requests, Follow-up & Timeline',
       icon: <Headphones className="w-5 h-5 text-sky-600" /> 
     },
     { 
